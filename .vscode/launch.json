@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Depurar con Webpack (Firefox)",
+      "url": "http://localhost:3000", // Asegúrate de colocar el puerto de tu devServer
+      "webRoot": "${workspaceFolder}",
+      "pathMappings": [
+        {
+            "url": "webpack:///src",
+            "path": "${workspaceFolder}/src"
+        }
+      ]
+    }
+  ]
+}

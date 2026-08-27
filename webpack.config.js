@@ -13,7 +13,7 @@ export default {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   devServer: {
 
     static: path.resolve(__dirname,'./dist'),
