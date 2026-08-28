@@ -9,14 +9,13 @@ class LinkedList {
   append(val,innerVal) {
     const newNode = new Node(val,innerVal);
     if (this.head == null) {
-      this.prepend(val);
+      this.prepend(val,innerVal);
     } else {
       let last = this.head;
       while (last.nextNode != null) last = last.nextNode;
       last.nextNode = newNode;
       this._size++;
     }
-    console.log(this._size);
   }
   prepend(val,innerVal) {
     const newNode = new Node(val,innerVal, this.head);
@@ -45,15 +44,17 @@ class LinkedList {
     }
   }
   at(index) {
+    if (index<0) return null
     let counter = 0;
     let actual = this.head;
     while (actual != null) {
       if (counter == index) {
-        return ("the value at", index, "is", actual.value);
+        return (actual);
       }
       actual = actual.nextNode;
       counter++;
     }
+    return null
   }
   pop() {
     let prevEl = this.head;
@@ -77,11 +78,10 @@ class LinkedList {
   findIndex(val) {
     let index = 0;
     let actual = this.head;
-    while (actual.nextNode != null) {
+    while (actual != null) {
       if (actual.value == val) {
         return index;
       }
-
       actual = actual.nextNode;
       index++;
     }
