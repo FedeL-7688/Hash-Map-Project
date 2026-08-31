@@ -1,4 +1,3 @@
-import "./style.css";
 import { LinkedList } from "./LinkedList.js";
 
 class HashMap {
@@ -26,6 +25,21 @@ class HashMap {
   };
 
   set(key, value) {
+
+    if (this.size >= this.capacity * this.loadFactor) {
+      let oldResult = this.result;
+      this.capacity = this.capacity * 2;
+      this.result = new Array(this.capacity);
+      this.size = 0;
+
+      oldResult.forEach((oldList) => {
+        if (oldList !== null & oldList.head !== null) {
+          oldList.listIterate((key, val) => this.set(key, val));
+        }
+   
+      });
+    }
+     
     let hashCode = this.hash(key);
 
     if (!this.result[hashCode]) {
@@ -33,48 +47,58 @@ class HashMap {
     }
     let bucketList = this.result[hashCode];
 
-   let index = bucketList.findIndex[key]
-   if (index!==-1){let targetNode = bucketList.at(index);
-    
-    if (targetNode) {
-      targetNode.innerVal = value;
+    let index = bucketList.findIndex(key);
+    if (index !== -1) {
+      let targetNode = bucketList.at(index);
+
+      if (targetNode) {
+        targetNode.innerVal = value;
+      } else {
+        bucketList.append(key, value);
+        this.size++;
+      }
     } else {
       bucketList.append(key, value);
+      this.size++;
     }
-    }
-   else bucketList.append(key,value)
-
-    this.size++;
-
-    if (this.size >= this.capacity * this.loadFactor) {
-      this.capacity * 2;
-    }
+     
 
     return this.result;
   }
 
   get(key) {
     let hashCode = this.hash(key);
-    let bucketList = this.result[hashCode]
-    if(!bucketList) return null;
+    let bucketList = this.result[hashCode];
+    if (!bucketList) return null;
 
-    let index = bucketList.findIndex(key)
-    if (index!== -1){
-      let node = bucketList.at(index)
-      return node.innerVal
+    let index = bucketList.findIndex(key);
+    if (index !== -1) {
+      let node = bucketList.at(index);
+      return node.innerVal;
     }
-    return null
+    return null;
   }
   has(key) {
     let hashCode = this.hash(key);
-    if (this.result[hashCode]) return true;
-    else return false;
+    let bucketList = this.result[hashCode];
+
+    if (bucketList) {
+      return bucketList.contains(key);
+    } else return false;
   }
   remove(key) {
     let hashCode = this.hash(key);
-    if (this.result[hashCode]) {
-      this.result.splice(hashCode, 1);
-      return true;
+    let bucketList = this.result[hashCode];
+    if (bucketList) {
+      let index = bucketList.findIndex(key);
+      if (index !== -1) {
+        bucketList.removeAt(index);
+        this.size--;
+        if (bucketList.size() === 0) {
+        delete this.result[hashCode];
+      }
+        return true;
+      } else return false;
     } else return false;
   }
   length() {
@@ -85,18 +109,24 @@ class HashMap {
   }
 
   keys() {
-    let keyArr = [];
+    let keysArr = [];
     this.result.forEach((element) => {
-      keyArr.push(element.key);
+      if (element.head !== null) {
+        let bucketArr = element.arrayMaker();
+        keysArr.push(...bucketArr);
+      }
     });
-    return keyArr;
+    return keysArr;
   }
   values() {
-    let keyArr = [];
+    let valsArr = [];
     this.result.forEach((element) => {
-      keyArr.push(element.value);
+      if (element.head !== null) {
+        let bucketArr = element.innerValArrMaker();
+        valsArr.push(...bucketArr);
+      }
     });
-    return keyArr;
+    return valsArr;
   }
   entries() {
     console.log(this.result);
@@ -118,7 +148,13 @@ test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden");
 test.set("penguin", "white");
+test.set("cougar", "beige");
 console.log(test.get("apple"));
+console.log(test.has("kite"));
+console.log(test.remove("banana"));
+console.log(test.length());
+console.log(test.keys());
+console.log(test.values());
 
 test.entries();
-console.log("the size of the hashMap is", test.size);
+console.log("the size of the hashMap is", test.length());

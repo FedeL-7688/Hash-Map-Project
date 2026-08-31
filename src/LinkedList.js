@@ -6,6 +6,37 @@ class LinkedList {
     this.head = null;
     this._size = 0;
   }
+
+  arrayMaker(){
+    let result = []
+    let actualNode = this.head
+    while (actualNode!==null){
+      result.push(actualNode.value)
+      actualNode = actualNode.nextNode
+      
+    }
+    return result
+  }
+  innerValArrMaker(){
+    let result = []
+    let actualNode = this.head
+    while (actualNode!==null){
+      result.push(actualNode.innerVal)
+      actualNode = actualNode.nextNode
+      
+    }
+    return result
+  }
+
+  listIterate(callback){
+    let actualNode = this.head
+     while(actualNode!==null){
+      callback(actualNode.value,actualNode.innerVal)
+      actualNode = actualNode.nextNode
+     }
+
+  }
+  
   append(val,innerVal) {
     const newNode = new Node(val,innerVal);
     if (this.head == null) {
@@ -108,7 +139,7 @@ class LinkedList {
     if (values.length == 0) return;
     let tempHead = new Node(values[0]);
     let currNew = tempHead;
-    this._size++
+    
 
     for (let i = 1; i < values.length; i++) {
      currNew.nextNode = new Node(values[i]);
@@ -151,12 +182,13 @@ class LinkedList {
            let previous = actual
            actual = actual.nextNode.nextNode
            previous.nextNode=actual
-
+           this._size--
+           return true
         }
         actual=actual.nextNode
         counter++
       }
-      this._size--
+      
     }
   }
 }
